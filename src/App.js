@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
-import loadProductData from "./products/loadProductData";
 
-import "./App.css";
+import loadProductData from "./products/loadProductData";
 import ProductItem from "./ProductItem";
 import { formattedTotal } from "./util";
+import filterProducts from "./products/filterProducts";
+
+import "./App.css";
 
 const App = () => {
-  const [state, setState] = useState({ loading: true });
+  const [dataState, setDataState] = useState({ loading: true });
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     loadProductData().then((productData) =>
-      setState({ loading: false, productData })
+      setDataState({ loading: false, productData })
     );
   }, []);
 
-  if (state.loading) return <div>Loading...</div>;
+  if (dataState.loading) return <div>Loading...</div>;
+
+  const productData = filterProducts(dataState.productData, searchTerm);
 
   return (
     <div className="product-list">
-      <label>Search Products</label>
-      <input type="text" />
+      <label htmlFor="search-term">Search Products</label>
+      <input
+        id="search-term"
+        type="text"
+        onChange={({ target }) => setSearchTerm(target.value)}
+      />
 
       <table>
         <thead>
@@ -29,12 +38,12 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          <ProductItem productData={state.productData} />
+          <ProductItem productData={productData} />
         </tbody>
         <tfoot>
           <tr>
             <td>Total</td>
-            <td>{formattedTotal(state.productData)}</td>
+            <td>{formattedTotal(productData)}</td>
           </tr>
         </tfoot>
       </table>
