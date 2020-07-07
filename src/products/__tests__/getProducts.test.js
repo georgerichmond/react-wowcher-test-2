@@ -17,4 +17,13 @@ describe("getProducts", () => {
       "Apricot",
     ]);
   });
+
+  it("aggregates number sold", async () => {
+    const result = await getProducts();
+    expect(result.slice(0, 3).map(({ sold }) => sold)).toEqual([
+      1106,
+      1512,
+      1506,
+    ]);
+  });
 });
