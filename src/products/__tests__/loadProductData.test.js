@@ -1,5 +1,6 @@
-import getProducts, { fetchBranches, aggregateProducts } from "../getProducts";
+import loadProductData, { fetchBranches } from "../loadProductData";
 
+// Used this test to build the function, it probably could be deleted but kept it in for info
 describe("fetchBranches", () => {
   it("returns all 3 branches in an array", async () => {
     const result = await fetchBranches();
@@ -8,9 +9,9 @@ describe("fetchBranches", () => {
   });
 });
 
-describe("getProducts", () => {
+describe("loadProductData", () => {
   it("returns a set of products in alphabetical order", async () => {
-    const result = await getProducts();
+    const result = await loadProductData();
     expect(result.slice(0, 3).map(({ name }) => name)).toEqual([
       "Alfalfa Sprouts",
       "Apple",
@@ -19,7 +20,7 @@ describe("getProducts", () => {
   });
 
   it("aggregates number sold", async () => {
-    const result = await getProducts();
+    const result = await loadProductData();
     expect(result.slice(0, 3).map(({ sold }) => sold)).toEqual([
       1106,
       1512,

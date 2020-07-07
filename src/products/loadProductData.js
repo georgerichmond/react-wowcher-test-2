@@ -9,12 +9,10 @@ const compareByName = (a, b) => a.name.localeCompare(b.name);
 
 const productReducer = (accumulator, currentProduct) => {
   const existingProduct = accumulator[currentProduct.id];
-  if (existingProduct) {
-    existingProduct.sold += currentProduct.sold;
-  } else {
-    accumulator[currentProduct.id] = currentProduct;
-  }
-  return accumulator;
+  const sold = existingProduct
+    ? currentProduct.sold + existingProduct.sold
+    : currentProduct.sold;
+  return { ...accumulator, [currentProduct.id]: { ...currentProduct, sold } };
 };
 
 export const aggregateProducts = (branchResponses) => {
@@ -25,6 +23,6 @@ export const aggregateProducts = (branchResponses) => {
   return Object.values(productsObj).sort(compareByName);
 };
 
-const getProducts = () => fetchBranches().then(aggregateProducts);
+const loadProductData = () => fetchBranches().then(aggregateProducts);
 
-export default getProducts;
+export default loadProductData;

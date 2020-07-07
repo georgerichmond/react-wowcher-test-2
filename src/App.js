@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
+import loadProductData from "./products/loadProductData";
 
 import "./App.css";
-
-const formatNumber = (number) =>
-  new Intl.NumberFormat("en", { minimumFractionDigits: 2 }).format(number);
+import ProductItem from "./ProductItem";
+import { formattedTotal } from "./util";
 
 const App = () => {
   const [state, setState] = useState({ loading: true });
 
   useEffect(() => {
-    (async () => {
-      const response = await fetch("/api/branch1.json");
-      setState({ loading: false });
-    })();
+    loadProductData().then((productData) =>
+      setState({ loading: false, productData })
+    );
   }, []);
 
   if (state.loading) return <div>Loading...</div>;
@@ -29,11 +28,13 @@ const App = () => {
             <th>Revenue</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <ProductItem productData={state.productData} />
+        </tbody>
         <tfoot>
           <tr>
             <td>Total</td>
-            <td></td>
+            <td>{formattedTotal(state.productData)}</td>
           </tr>
         </tfoot>
       </table>

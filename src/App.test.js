@@ -27,6 +27,8 @@ it("renders rows with product name as key", async () => {
   expect(app.find("table tbody tr").at(73).key()).toEqual("Lychee");
 });
 
+// Had to update the snapshot as the figures in it seem to be wrong, and total doesn't match total test
+// I would probably not use a snapshot test for this sort of thing in any case
 it("renders table that is sorted ascending", async () => {
   const app = mount(<App />);
   await flushRequestsAndUpdate(app);
