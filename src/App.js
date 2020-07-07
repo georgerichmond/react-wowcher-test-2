@@ -23,12 +23,14 @@ const App = () => {
 
   return (
     <div className="product-list">
-      <label htmlFor="search-term">Search Products</label>
-      <input
-        id="search-term"
-        type="text"
-        onChange={({ target }) => setSearchTerm(target.value)}
-      />
+      <div className="search-container">
+        <label htmlFor="search-term">Search Products</label>
+        <input
+          id="search-term"
+          type="text"
+          onChange={({ target }) => setSearchTerm(target.value)}
+        />
+      </div>
 
       <table>
         <thead>
