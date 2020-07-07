@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./App.css";
 
@@ -7,6 +7,13 @@ const formatNumber = (number) =>
 
 const App = () => {
   const [state, setState] = useState({ loading: true });
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("/api/branch1.json");
+      setState({ loading: false });
+    })();
+  }, []);
 
   if (state.loading) return <div>Loading...</div>;
 

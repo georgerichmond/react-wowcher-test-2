@@ -1,37 +1,7 @@
 import React from "react";
-import Adapter from "enzyme-adapter-react-16";
-import { mount, configure } from "enzyme";
-import "jest-enzyme";
-import branch1 from "../public/api/branch1.json";
-import branch2 from "../public/api/branch2.json";
-import branch3 from "../public/api/branch3.json";
+import { mount } from "enzyme";
 import App from "./App";
-
-configure({
-  adapter: new Adapter()
-});
-
-const responses = {
-  "api/branch1.json": branch1,
-  "api/branch2.json": branch2,
-  "api/branch3.json": branch3,
-  "/api/branch1.json": branch1,
-  "/api/branch2.json": branch2,
-  "/api/branch3.json": branch3
-};
-
-global.fetch = endpoint =>
-  Promise.resolve({
-    json: () => Promise.resolve(responses[endpoint])
-  });
-
-// based on https://blog.pragmatists.com/genuine-guide-to-testing-react-redux-applications-6f3265c11f63
-const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
-
-export const flushRequestsAndUpdate = async enzymeWrapper => {
-  await flushAllPromises();
-  enzymeWrapper.update();
-};
+import { flushRequestsAndUpdate } from "./testHelpers";
 
 it("renders without crashing", () => {
   mount(<App />);
@@ -53,18 +23,8 @@ it("renders rows with product name as key", async () => {
   const app = mount(<App />);
   await flushRequestsAndUpdate(app);
 
-  expect(
-    app
-      .find("table tbody tr")
-      .at(56)
-      .key()
-  ).toEqual("Hominy");
-  expect(
-    app
-      .find("table tbody tr")
-      .at(73)
-      .key()
-  ).toEqual("Lychee");
+  expect(app.find("table tbody tr").at(56).key()).toEqual("Hominy");
+  expect(app.find("table tbody tr").at(73).key()).toEqual("Lychee");
 });
 
 it("renders table that is sorted ascending", async () => {
